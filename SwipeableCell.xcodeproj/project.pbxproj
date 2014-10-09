@@ -15,6 +15,7 @@
 		D3397C2419E4F0760021331C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D3397C2319E4F0760021331C /* Images.xcassets */; };
 		D3397C2719E4F0760021331C /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D3397C2519E4F0760021331C /* LaunchScreen.xib */; };
 		D3397C3319E4F0760021331C /* SwipeableCellTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D3397C3219E4F0760021331C /* SwipeableCellTests.m */; };
+		D3D45F8E19E6646000F4484B /* SwipeableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D3D45F8D19E6646000F4484B /* SwipeableCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +44,8 @@
 		D3397C2C19E4F0760021331C /* SwipeableCellTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwipeableCellTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3397C3119E4F0760021331C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D3397C3219E4F0760021331C /* SwipeableCellTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SwipeableCellTests.m; sourceTree = "<group>"; };
+		D3D45F8C19E6646000F4484B /* SwipeableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwipeableCell.h; sourceTree = "<group>"; };
+		D3D45F8D19E6646000F4484B /* SwipeableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwipeableCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,13 +89,9 @@
 			children = (
 				D3397C1719E4F0760021331C /* AppDelegate.h */,
 				D3397C1819E4F0760021331C /* AppDelegate.m */,
-				D3397C1A19E4F0760021331C /* MasterViewController.h */,
-				D3397C1B19E4F0760021331C /* MasterViewController.m */,
-				D3397C1D19E4F0760021331C /* DetailViewController.h */,
-				D3397C1E19E4F0760021331C /* DetailViewController.m */,
-				D3397C2019E4F0760021331C /* Main.storyboard */,
+				D3D45F8A19E6641200F4484B /* Controllers */,
+				D3D45F8B19E6641E00F4484B /* Views */,
 				D3397C2319E4F0760021331C /* Images.xcassets */,
-				D3397C2519E4F0760021331C /* LaunchScreen.xib */,
 				D3397C1319E4F0760021331C /* Supporting Files */,
 			);
 			path = SwipeableCell;
@@ -122,6 +121,28 @@
 				D3397C3119E4F0760021331C /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		D3D45F8A19E6641200F4484B /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				D3397C1A19E4F0760021331C /* MasterViewController.h */,
+				D3397C1B19E4F0760021331C /* MasterViewController.m */,
+				D3397C1D19E4F0760021331C /* DetailViewController.h */,
+				D3397C1E19E4F0760021331C /* DetailViewController.m */,
+				D3D45F8C19E6646000F4484B /* SwipeableCell.h */,
+				D3D45F8D19E6646000F4484B /* SwipeableCell.m */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		D3D45F8B19E6641E00F4484B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D3397C2019E4F0760021331C /* Main.storyboard */,
+				D3397C2519E4F0760021331C /* LaunchScreen.xib */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -228,6 +249,7 @@
 				D3397C1C19E4F0760021331C /* MasterViewController.m in Sources */,
 				D3397C1619E4F0760021331C /* main.m in Sources */,
 				D3397C1F19E4F0760021331C /* DetailViewController.m in Sources */,
+				D3D45F8E19E6646000F4484B /* SwipeableCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -418,6 +440,7 @@
 				D3397C3819E4F0760021331C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D3397C3919E4F0760021331C /* Build configuration list for PBXNativeTarget "SwipeableCellTests" */ = {
 			isa = XCConfigurationList;
@@ -426,6 +449,7 @@
 				D3397C3B19E4F0760021331C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
