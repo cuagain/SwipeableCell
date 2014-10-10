@@ -13,6 +13,8 @@
 @interface MasterViewController () <SwipeableCellDelegate>
 
 @property NSMutableArray *objects;
+@property (nonatomic, strong) NSMutableSet *cellsCurrentlyEditing;
+
 @end
 
 @implementation MasterViewController
@@ -36,12 +38,23 @@
     
     
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
+    
+    self.cellsCurrentlyEditing = [NSMutableSet new];
 
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)cellDidOpen:(UITableViewCell *)cell {
+    NSIndexPath *currentEditingIndexPath = [self.tableView indexPathForCell:cell];
+    [self.cellsCurrentlyEditing addObject:currentEditingIndexPath];
+}
+
+- (void)cellDidClose:(UITableViewCell *)cell {
+    [self.cellsCurrentlyEditing removeObject:[self.tableView indexPathForCell:cell]];
 }
 
 - (void)showDetailWithText:(NSString *)detailText
@@ -133,12 +146,16 @@
         NSLog(@"Cell recursive description:\n\n%@\n\n", [cell performSelector:@selector(recursiveDescription)]);
     #endif
     
+    if ([self.cellsCurrentlyEditing containsObject:indexPath]) {
+        [cell openCell];
+    }
+    
     return cell;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     // Return NO if you do not want the specified item to be editable.
-    return YES;
+    return NO;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {

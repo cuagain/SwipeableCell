@@ -7,6 +7,7 @@
 //
 
 #import "SwipeableCell.h"
+static CGFloat const kBounceValue = 20.0f;
 
 @implementation SwipeableCell
 
@@ -103,24 +104,122 @@
         }
             break;
         case UIGestureRecognizerStateEnded:
-            NSLog(@"Pan Ended");
+            if (self.startingRightLayoutConstraintConstant == 0) { //1
+                //Cell was opening
+                CGFloat halfOfButtonOne = CGRectGetWidth(self.button1.frame) / 2; //2
+                if (self.contentViewRightConstraint.constant >= halfOfButtonOne) { //3
+                    //Open all the way
+                    [self setConstraintsToShowAllButtons:YES notifyDelegateDidOpen:YES];
+                } else {
+                    //Re-close
+                    [self resetConstraintContstantsToZero:YES notifyDelegateDidClose:YES];
+                }
+            } else {
+                //Cell was closing
+                CGFloat buttonOnePlusHalfOfButton2 = CGRectGetWidth(self.button1.frame) + (CGRectGetWidth(self.button2.frame) / 2); //4
+                if (self.contentViewRightConstraint.constant >= buttonOnePlusHalfOfButton2) { //5
+                    //Re-open all the way
+                    [self setConstraintsToShowAllButtons:YES notifyDelegateDidOpen:YES];
+                } else {
+                    //Close
+                    [self resetConstraintContstantsToZero:YES notifyDelegateDidClose:YES];
+                }
+            }
             break;
         case UIGestureRecognizerStateCancelled:
-            NSLog(@"Pan Cancelled");
+            if (self.startingRightLayoutConstraintConstant == 0) {
+                //Cell was closed - reset everything to 0
+                [self resetConstraintContstantsToZero:YES notifyDelegateDidClose:YES];
+            } else {
+                //Cell was open - reset to the open state
+                [self setConstraintsToShowAllButtons:YES notifyDelegateDidOpen:YES];
+            }
             break;
         default:
             break;
     }
 }
 
-- (void)resetConstraintContstantsToZero:(BOOL)animated notifyDelegateDidClose:(BOOL)endEditing
+- (void)resetConstraintContstantsToZero:(BOOL)animated notifyDelegateDidClose:(BOOL)notifyDelegate
 {
     //TODO: Build.
+    
+    if (notifyDelegate) {
+        [self.delegate cellDidClose:self];
+    }
+    
+    //1
+    if (self.startingRightLayoutConstraintConstant == [self buttonTotalWidth] &&
+        self.contentViewRightConstraint.constant == [self buttonTotalWidth]) {
+        return;
+    }
+    //2
+    self.contentViewLeftConstraint.constant = -[self buttonTotalWidth] - kBounceValue;
+    self.contentViewRightConstraint.constant = [self buttonTotalWidth] + kBounceValue;
+    
+    [self updateConstraintsIfNeeded:animated completion:^(BOOL finished) {
+        //3
+        self.contentViewLeftConstraint.constant = -[self buttonTotalWidth];
+        self.contentViewRightConstraint.constant = [self buttonTotalWidth];
+        
+        [self updateConstraintsIfNeeded:animated completion:^(BOOL finished) {
+            //4
+            self.startingRightLayoutConstraintConstant = self.contentViewRightConstraint.constant;
+        }];
+    }];
 }
 
 - (void)setConstraintsToShowAllButtons:(BOOL)animated notifyDelegateDidOpen:(BOOL)notifyDelegate
 {
     //TODO: Build
+    if (notifyDelegate) {
+        [self.delegate cellDidOpen:self];
+    }
+    
+    if (self.startingRightLayoutConstraintConstant == 0 &&
+        self.contentViewRightConstraint.constant == 0) {
+        //Already all the way closed, no bounce necessary
+        return;
+    }
+    
+    self.contentViewRightConstraint.constant = -kBounceValue;
+    self.contentViewLeftConstraint.constant = kBounceValue;
+    
+    [self updateConstraintsIfNeeded:animated completion:^(BOOL finished) {
+        self.contentViewRightConstraint.constant = 0;
+        self.contentViewLeftConstraint.constant = 0;
+        
+        [self updateConstraintsIfNeeded:animated completion:^(BOOL finished) {
+            self.startingRightLayoutConstraintConstant = self.contentViewRightConstraint.constant;
+        }];
+    }];
+}
+
+- (void)updateConstraintsIfNeeded:(BOOL)animated completion:(void (^)(BOOL finished))completion {
+    float duration = 0;
+    if (animated) {
+        duration = 0.1;
+    }
+    
+    [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        [self layoutIfNeeded];
+    } completion:completion];
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return YES;
+}
+
+
+- (void)prepareForReuse {
+    [super prepareForReuse];
+    [self resetConstraintContstantsToZero:NO notifyDelegateDidClose:NO];
+}
+
+- (void)openCell {
+    [self setConstraintsToShowAllButtons:NO notifyDelegateDidOpen:NO];
 }
 
 @end

@@ -11,6 +11,8 @@
 @protocol SwipeableCellDelegate <NSObject>
 - (void)buttonOneActionForItemText:(NSString *)itemText;
 - (void)buttonTwoActionForItemText:(NSString *)itemText;
+- (void)cellDidOpen:(UITableViewCell *)cell;
+- (void)cellDidClose:(UITableViewCell *)cell;
 @end
 
 
@@ -30,5 +32,6 @@
 @property (nonatomic, weak) IBOutlet NSLayoutConstraint *contentViewRightConstraint;
 @property (nonatomic, weak) IBOutlet NSLayoutConstraint *contentViewLeftConstraint;
 
+- (void)openCell;
 
 @end
